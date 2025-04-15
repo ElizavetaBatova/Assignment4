@@ -5,7 +5,7 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 import asyncio
 
-application = Application.builder().token("8061586136:AAFyi65FyY-ZsLNX-I1W0tGmmxf9UX46C_Y").build()
+application = Application.builder().token("8061586136:AAFyi65FyY-ZsLNX-I1W0tGmmxf9UX46C_Y").build() #We took token from BotFather
 
 async def start(update, context):
     await update.message.reply_text("Welcome to Financial Planner Bot! To see all the available commands use /help")
@@ -21,7 +21,7 @@ async def help(update, context):
  /notifyoff - to delete push notifications""")
 application.add_handler(CommandHandler("help", help))
 
-CATEGORY, INCOME, BUDGET = range(3) 
+CATEGORY, INCOME, BUDGET = range(3) #We have 3 main variable
 
 user_data = {} 
 
@@ -30,17 +30,17 @@ async def config(update: Update, context: CallbackContext):
     return CATEGORY 
 
 async def category(update: Update, context: CallbackContext):
-    context.user_data["category"] = update.message.text
+    context.user_data["category"] = update.message.text #It is text and will not be converted into numerals in any case
     await update.message.reply_text("Print income for the category:")
     return INCOME
 
 async def income(update: Update, context: CallbackContext):
-    context.user_data["income"] = float(update.message.text) 
+    context.user_data["income"] = float(update.message.text) #We had to convert it into float to make it possible use math (log function) in the future
     await update.message.reply_text("Print budget for the category:")
     return BUDGET
 
 async def budget(update: Update, context: CallbackContext):
-    context.user_data["budget"] = float(update.message.text) 
+    context.user_data["budget"] = float(update.message.text) #This one is the same as income :>
     await update.message.reply_text(f"Saved! Category: {context.user_data['category']}, Income: {context.user_data['income']}, Budget: {context.user_data['budget']}")
     return ConversationHandler.END 
 
@@ -66,12 +66,12 @@ logging.basicConfig(level=logging.INFO)
 async def log(update: Update, context: CallbackContext):
     user_data = context.user_data
 
-    logging.info(f"User data: {user_data}")  # Print stored values
+    logging.info(f"User data: {user_data}")  #Print stored values
 
     if "category" in user_data and "income" in user_data and "budget" in user_data:
         try:
-            income_log = math.log(user_data["income"])  # No need to convert again
-            budget_log = math.log(user_data["budget"])
+            income_log = math.log(user_data["income"])  #No need to convert it here, because we've done it earlier
+            budget_log = math.log(user_data["budget"]) #Here too
             
             response = (
                 f"📊 Expense & Income Log:\n"
